@@ -31,9 +31,10 @@ $(document).ready(function () {
 function showModalAndReset(isTimeOut) {
     stopTimer();
     timerId = null;
-    $("#time").html("30");
-    $('.progress-bar').css('width', 0 + '%').attr('aria-valuenow', 0);
-
+    $("#time").html("5");
+    $("#progress-bar").html("0");
+    var score = clickCount * 10;
+    clickCount = 0;
 
     if (isTimeOut) {
         $("#myModalLabel").html("Time's Up!!!");
@@ -43,45 +44,20 @@ function showModalAndReset(isTimeOut) {
 
     var message;
     if (minOrMax == 0) {
-        message = "The minimum value was " + min + ". Your Score is " + clickCount + "/15. Try again... "
+        message = "The minimum value was " + min + ". Your Score is " + score + ". Try again... "
     } else {
-        message = "The maximum value was " + max + ".  Your Score is " + clickCount + "/15. Try again..."
+        message = "The maximum value was " + max + ".  Your Score is " + score + ". Try again..."
     }
     $('#modal-body-text').html(message);
 
-    updateTweetButtonText('I have scored ' + clickCount + '/15 on #MinMax30. ');
+    updateTweetButtonText('I have scored ' + score + ' on #MinMax30. ');
 
     $('#myModal').modal('show');
 
     $('#myModal').on('hidden.bs.modal', function () {
-        clickCount = 0;
         newStep();
-        startGame();
     })
 
-}
-
-function gameWon() {
-    stopTimer();
-    timerId = null;
-    $("#time").html("30");
-    $('.progress-bar').css('width', 0 + '%').attr('aria-valuenow', 0);
-
-    $("#myModalLabel").html("Congratulations!!!");
-
-    var message = "You've won MinMax30. Your Score is 15/15.";
-
-    $('#modal-body-text').html(message);
-
-    updateTweetButtonText('I have scored ' + clickCount + '/15 on #MinMax30. ');
-
-    $('#myModal').modal('show');
-
-    $('#myModal').on('hidden.bs.modal', function () {
-        clickCount = 0;
-        newStep();
-        startGame();
-    })
 }
 
 function updateTweetButtonText(message) {
@@ -90,13 +66,12 @@ function updateTweetButtonText(message) {
 }
 
 function checkAnswer(divId) {
-    if (timerId == null) {
-        startTimer();
-    }
+    stopTimer();
+    timerId = null;
+    $("#time").html("5");
 
     var divTag = "#" + divId;
-    var value = $(divTag).text();
-    value = parseInt(value);
+    var value = parseInt($(divTag).text());
 
     if (minOrMax == 0 && value != min) {
         showModalAndReset(false);
@@ -104,13 +79,9 @@ function checkAnswer(divId) {
         showModalAndReset(false);
     } else {
         clickCount++;
-        $('.progress-bar').css('width', clickCount * 6.66 + '%').attr('aria-valuenow', clickCount * 6.66);
-        if (clickCount == 15) {
-            gameWon();
-            return;
-        }
+        $("#progress-bar").html(clickCount * 10);
         newStep();
-        startGame();
+        startTimer();
     }
 }
 
@@ -192,53 +163,8 @@ function generateNumbers(lowerBound, upperBound) {
 
 
 function startGame() {
-    //todo find a workaround for this ugly code
-    $('#block-div-1').click(function () {
-        checkAnswer("block-div-1");
-    });
-    $('#block-div-2').click(function () {
-        checkAnswer("block-div-2");
-    });
-    $('#block-div-3').click(function () {
-        checkAnswer("block-div-3");
-    });
-    $('#block-div-4').click(function () {
-        checkAnswer("block-div-4");
-    });
-    $('#block-div-5').click(function () {
-        checkAnswer("block-div-5");
-    });
-    $('#block-div-6').click(function () {
-        checkAnswer("block-div-6");
-    });
-    $('#block-div-7').click(function () {
-        checkAnswer("block-div-7");
-    });
-    $('#block-div-8').click(function () {
-        checkAnswer("block-div-8");
-    });
-    $('#block-div-9').click(function () {
-        checkAnswer("block-div-9");
-    });
-    $('#block-div-10').click(function () {
-        checkAnswer("block-div-10");
-    });
-    $('#block-div-11').click(function () {
-        checkAnswer("block-div-11");
-    });
-    $('#block-div-12').click(function () {
-        checkAnswer("block-div-12");
-    });
-    $('#block-div-13').click(function () {
-        checkAnswer("block-div-13");
-    });
-    $('#block-div-14').click(function () {
-        checkAnswer("block-div-14");
-    });
-    $('#block-div-15').click(function () {
-        checkAnswer("block-div-15");
-    });
-    $('#block-div-0').click(function () {
-        checkAnswer("block-div-0");
+    $('#block-container').click(function (e) {
+        e.stopPropagation();
+        checkAnswer(e.target.id);
     });
 }

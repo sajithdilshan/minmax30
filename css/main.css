@@ -144,12 +144,14 @@ textarea {
 }
 
 #progress-bar {
-    /*height: 50px;*/
-    padding-top: 15px;
     padding-left: 20px;
     float: left;
     width: 70%;
-    text-align: right;
+    text-align: left;
+    font-family: "Source Code Pro", monospace;
+    font-weight: 600;
+    font-size: 35px;
+    color: #da8c3b;
 }
 
 #time-text {
