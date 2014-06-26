@@ -239,6 +239,6 @@ function startGame() {
         checkAnswer("block-div-15");
     });
     $('#block-div-0').click(function () {
-        checkAnswer("block-div-16");
+        checkAnswer("block-div-0");
     });
 }
